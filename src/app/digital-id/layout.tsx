@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 
 import { useWallet } from '@aptos-labs/wallet-adapter-react';
 
@@ -15,9 +16,9 @@ export default function DataLayout({
         <main className='nav'>
             <nav>
                 <Image id='gray-logo' src='/icons/logo.svg' alt='logo' width={43} height={39} />
-                <button id='gray-button' onClick={disconnect}>
+                <Link href={'/'} id='gray-button' onClick={disconnect}>
                     Disconnect Wallet
-                </button>
+                </Link>
             </nav>
             {children}
         </main>
