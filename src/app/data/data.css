@@ -1,0 +1,10 @@
+main.data {
+    > nav {
+        width: 100dvw;
+
+        padding: 3rem;
+
+        display: flex;
+        justify-content: space-between;
+    }
+}
