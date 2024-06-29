@@ -16,9 +16,14 @@ export default function Home() {
                 </Link>
                 <button id='gray-button'>Connect Identity</button>
             </div>
-            <div className='participants'>
-                1 unique human participated <div className='line'></div>
-            </div>
+            <div className='participants'>1 unique human participated</div>
+            <Image
+                className='planet'
+                src='/images/planet.png'
+                alt='planet'
+                width={1280}
+                height={362}
+            />
         </main>
     );
 }
