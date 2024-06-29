@@ -16,7 +16,7 @@ export default function ConnectWallet() {
             <Image src='/icons/logo.svg' alt='logo' width={43} height={39} />
             <section className='wallet-connection'>
                 <Link href='/'>Back to home</Link>
-                <Image src='/passport.png' alt='passport' width={312} height={411} />
+                <Image src='/images/passport.png' alt='passport' width={312} height={411} />
                 <h4>Hey, you are almost there!</h4>
                 <h1>Connect yourself to the Aptos Network.</h1>
                 <button id='green-button' onClick={() => connect(PetraWalletName)}>
