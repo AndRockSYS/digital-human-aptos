@@ -1,10 +1,70 @@
-main.data {
-    > nav {
-        width: 100dvw;
+main.nav > section {
+    width: 100%;
 
-        padding: 3rem;
+    > h2 {
+        margin-top: 1.5rem;
 
-        display: flex;
-        justify-content: space-between;
+        text-align: start;
+        font-weight: 600;
+    }
+
+    > h6 {
+        margin-top: 1rem;
+
+        text-align: start;
+        color: var(--light-gray);
+    }
+
+    > section.scan-methods {
+        margin-top: 5.75rem;
+
+        display: grid;
+        grid-template-columns: repeat(2, 1fr) fit-content;
+        grid-template-rows: fit-content;
+        column-gap: 15rem;
+
+        align-items: center;
+        justify-items: center;
+
+        > .device {
+            width: 25rem;
+            height: auto;
+        }
+
+        > .upload {
+            height: 14.25rem;
+            width: auto;
+        }
+
+        > h3 {
+            margin-top: 1.625rem;
+
+            font-weight: 600;
+        }
+
+        > button {
+            margin-top: 1.625rem;
+        }
+
+        > a {
+            margin-top: 1rem;
+        }
+
+        > h6,
+        > a {
+            color: var(--light-gray);
+        }
+
+        > img#next-button {
+            grid-column: 3 / 4;
+            grid-row: 1 / 2;
+
+            cursor: pointer;
+        }
+
+        > .filler {
+            grid-column: 3 / 4;
+            grid-row: 2 / 7;
+        }
     }
 }

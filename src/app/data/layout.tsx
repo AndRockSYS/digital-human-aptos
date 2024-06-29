@@ -14,7 +14,7 @@ export default function DataLayout({
     const { disconnect } = useWallet();
 
     return (
-        <main className='data'>
+        <main className='nav'>
             <nav>
                 <Image id='gray-logo' src='/icons/logo.svg' alt='logo' width={43} height={39} />
                 <button id='gray-button' onClick={disconnect}>
