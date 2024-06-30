@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 import BiometricsMethod from './BiometricsMethod';
+import Nav from '../../components/Nav';
 import { useWallet } from '@aptos-labs/wallet-adapter-react';
 
 import './digital-id.css';
@@ -13,6 +14,7 @@ export default function DigitalHuman() {
 
     return (
         <main className='digital-id'>
+            <Nav />
             <Image
                 className='passport'
                 src='/images/passport-active.png'

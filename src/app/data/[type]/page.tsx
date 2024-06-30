@@ -3,16 +3,24 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
+import Nav from '@/components/Nav';
+
+import { useMemo, useState } from 'react';
 import { usePathname } from 'next/navigation';
 
 import pageData from './pageData';
+
+import '../data.css';
 
 export default function DataCollection() {
     const dataType = usePathname().split('/')[2];
     const data = pageData[dataType];
 
+    const [file, setFile] = useState<File | undefined>(undefined);
+
     return (
-        <section>
+        <main className='data'>
+            <Nav />
             <h2>{data.name}</h2>
             <h6>{data.description}</h6>
             <section className='scan-methods'>
@@ -37,17 +45,47 @@ export default function DataCollection() {
                 <button id='disabled' disabled>
                     Connect to scanner
                 </button>
-                <button id='green-button'>{data.upload.buttonText}</button>
+                {useMemo(
+                    () =>
+                        file ? (
+                            <button id='gray-button'>
+                                {file ? file.name : ''} <input type='file' />
+                                <Image
+                                    src='/icons/cross.svg'
+                                    alt='cross'
+                                    height={20}
+                                    width={20}
+                                    onClick={() => setFile(undefined)}
+                                />
+                            </button>
+                        ) : (
+                            <button id='green-button'>
+                                {data.upload.buttonText}
+                                <input
+                                    type='file'
+                                    onChange={(event) => setFile(event.target.files?.[0])}
+                                />
+                            </button>
+                        ),
+                    [file]
+                )}
+
                 <Link href={'/'}>Available Soon</Link>
-                <Image
-                    id='next-button'
-                    src='/icons/next-button.svg'
-                    alt='next'
-                    height={72}
-                    width={72}
-                />
+                {useMemo(
+                    () => (
+                        <Image
+                            id='next-button'
+                            src='/icons/next-button.svg'
+                            alt='next'
+                            height={72}
+                            width={72}
+                            style={file ? {} : { pointerEvents: 'none', opacity: '30%' }}
+                        />
+                    ),
+                    [file]
+                )}
                 <div className='filler'></div>
             </section>
-        </section>
+        </main>
     );
 }
