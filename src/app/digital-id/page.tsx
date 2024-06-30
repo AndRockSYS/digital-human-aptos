@@ -29,9 +29,17 @@ export default function DigitalHuman() {
                         ? account.address.slice(0, 5) + '...' + account.address.slice(59, 64)
                         : '0x0'}
                 </h6>
-                <div className='human-object'>
-                    <Image src='/icons/aptos.svg' alt='passport' width={20} height={20} />
-                    <Link href={'/'}>View Digital Human ID</Link>
+                <div className='human-data'>
+                    <div>
+                        <Image src='/icons/aptos.svg' alt='passport' width={20} height={20} />
+                        <Link href={'/'}>View Digital Human ID</Link>
+                    </div>
+                    <Image
+                        src='/icons/face-preview.png'
+                        alt='face-preview'
+                        width={20}
+                        height={20}
+                    />
                 </div>
                 <h6>Biometrics</h6>
                 <div className='biometrics'>
