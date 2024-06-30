@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
+import VerificationPopup from '@/components/VerificationPopup';
 import Nav from '@/components/Nav';
 
 import { useMemo, useState } from 'react';
@@ -10,13 +11,14 @@ import { usePathname } from 'next/navigation';
 
 import pageData from './pageData';
 
-import '../data.css';
+import './data.css';
 
 export default function DataCollection() {
     const dataType = usePathname().split('/')[2];
     const data = pageData[dataType];
 
     const [file, setFile] = useState<File | undefined>(undefined);
+    const [verification, setVerification] = useState(false);
 
     return (
         <main className='data'>
@@ -79,6 +81,7 @@ export default function DataCollection() {
                             alt='next'
                             height={72}
                             width={72}
+                            onClick={() => (file ? setVerification(true) : {})}
                             style={file ? {} : { pointerEvents: 'none', opacity: '30%' }}
                         />
                     ),
@@ -86,6 +89,19 @@ export default function DataCollection() {
                 )}
                 <div className='filler'></div>
             </section>
+            {useMemo(
+                () =>
+                    verification ? (
+                        <VerificationPopup
+                            dataType={dataType}
+                            mintingFunction={async () => {}}
+                            setVerification={setVerification}
+                        />
+                    ) : (
+                        <></>
+                    ),
+                [verification]
+            )}
         </main>
     );
 }
