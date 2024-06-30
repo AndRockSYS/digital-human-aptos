@@ -2,6 +2,8 @@
     --black: #292929;
 
     --light-gray: #a6a6a6;
+
+    --green: #37ea0b;
 }
 
 * {
@@ -24,6 +26,8 @@ body {
 
 body {
     > main {
+        height: 100dvh;
+
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -75,13 +79,9 @@ a {
     width: auto;
 }
 
-main.nav {
-    padding: 3rem 5.6rem;
+nav {
+    width: 100%;
 
-    > nav {
-        width: 100%;
-
-        display: flex;
-        justify-content: space-between;
-    }
+    display: flex;
+    justify-content: space-between;
 }

@@ -36,7 +36,7 @@ main.home {
         font-weight: 500;
 
         border: 3px solid #f0f0f0;
-        box-shadow: 0px 4px 13.5px rgba(123, 255, 90, 0.8);
+        box-shadow: 0px 4px 13.5px var(--green);
         border-radius: 50px;
     }
 

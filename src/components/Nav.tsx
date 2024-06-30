@@ -2,15 +2,14 @@
 
 import Image from 'next/image';
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
 import { useWallet } from '@aptos-labs/wallet-adapter-react';
+import { PetraWalletName } from 'petra-plugin-wallet-adapter';
 
 export default function DataLayout() {
-    const { account, disconnect } = useWallet();
-    const router = useRouter();
+    const { account, connect, disconnect } = useWallet();
 
     useEffect(() => {
-        if (account?.address) router.push('/');
+        if (account?.address) connect(PetraWalletName);
     }, [account]);
 
     return (

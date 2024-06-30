@@ -9,7 +9,7 @@
     font-weight: 500;
     text-decoration: none;
 
-    background: linear-gradient(#37ea0b, #b3ffa0);
+    background: linear-gradient(var(--green), #b3ffa0);
 
     border: none;
     border-radius: 10px;
