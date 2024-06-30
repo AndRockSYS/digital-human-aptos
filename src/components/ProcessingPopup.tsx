@@ -16,7 +16,7 @@ interface Props {
     setVerification: (value: React.SetStateAction<boolean>) => void;
 }
 
-export default function VerificationPopup({ dataType, mintingFunction, setVerification }: Props) {
+export default function ProcessingPopup({ dataType, mintingFunction, setVerification }: Props) {
     const router = useRouter();
 
     const [isMinting, setIsMinting] = useState(false);
