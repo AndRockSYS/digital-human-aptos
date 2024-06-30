@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 import { useWallet } from '@aptos-labs/wallet-adapter-react';
 
-import './minting-process.css';
+import './process.css';
 
 interface Props {
     dataType: string;
@@ -14,7 +14,7 @@ export default function MintingProcess({ dataType }: Props) {
     const { account } = useWallet();
 
     return (
-        <section className='minting'>
+        <section className='process'>
             <Image id='gray-logo' src='/icons/logo.svg' alt='logo' width={43} height={39} />
             <h1>
                 Minting {dataType.charAt(0).toUpperCase() + dataType.slice(1)} Verification Token...

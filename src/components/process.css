@@ -1,4 +1,4 @@
-section.minting {
+section.process {
     position: absolute;
 
     width: 100dvw;
@@ -19,12 +19,33 @@ section.minting {
     > div.address {
         padding: 1rem 3.5rem;
 
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        row-gap: 1rem;
+
         border: 1px solid var(--light-gray);
         box-shadow: 0px 0px 8.2px var(--green);
         border-radius: 10px;
 
         > h6 {
             font-size: 1.25rem;
+        }
+
+        > input {
+            font-family: inherit;
+            text-align: center;
+
+            border: none;
+        }
+
+        > input::placeholder {
+            color: var(--light-gray);
+        }
+
+        > input:focus {
+            outline: none;
         }
     }
 
