@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import VerificationPopup from '@/components/VerificationPopup';
+import ProcessingPopup from '@/components/ProcessingPopup';
 import Nav from '@/components/Nav';
 
 import { useMemo, useState } from 'react';
@@ -92,7 +92,7 @@ export default function DataCollection() {
             {useMemo(
                 () =>
                     verification ? (
-                        <VerificationPopup
+                        <ProcessingPopup
                             dataType={dataType}
                             mintingFunction={async () => {}}
                             setVerification={setVerification}
