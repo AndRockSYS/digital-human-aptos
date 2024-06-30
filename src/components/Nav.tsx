@@ -1,11 +1,15 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+
 import { useWallet } from '@aptos-labs/wallet-adapter-react';
 import { PetraWalletName } from 'petra-plugin-wallet-adapter';
 
 export default function DataLayout() {
+    const router = useRouter();
     const { account, connect, disconnect } = useWallet();
 
     useEffect(() => {
@@ -14,10 +18,18 @@ export default function DataLayout() {
 
     return (
         <nav style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
-            <Image id='gray-logo' src='/icons/logo.svg' alt='logo' width={43} height={39} />
-            <button id='gray-button' onClick={disconnect}>
+            <Image
+                id='gray-logo'
+                src='/icons/logo.svg'
+                alt='logo'
+                width={43}
+                height={39}
+                onClick={() => router.push('/')}
+                style={{ cursor: 'pointer' }}
+            />
+            <Link href='/' id='gray-button' onClick={disconnect}>
                 Disconnect Wallet
-            </button>
+            </Link>
         </nav>
     );
 }
