@@ -2,6 +2,8 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 import { useWallet } from '@aptos-labs/wallet-adapter-react';
 import { PetraWalletName } from 'petra-plugin-wallet-adapter';
@@ -9,7 +11,13 @@ import { PetraWalletName } from 'petra-plugin-wallet-adapter';
 import './connect.css';
 
 export default function ConnectWallet() {
-    const { connect } = useWallet();
+    const router = useRouter();
+    const { connect, connected } = useWallet();
+
+    useEffect(() => {
+        //todo check whenether user has a digital id
+        if (connected) router.push('/digital-id');
+    }, [connected]);
 
     return (
         <main className='connect'>

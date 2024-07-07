@@ -1,0 +1,23 @@
+[package]
+name = "digital_human"
+version = "1.0.0"
+authors = []
+
+[addresses]
+digital_human = "7f8d82e34ea1b6b8dfe94f93d81d042ced8f0fd767afadc65cdff56a2cd43244"
+owner = "d4ee4a6e90e9fcf4f2349dfefabf9ae4845cc174153c18b9ebabc0b1853c03a5"
+
+[dev-addresses]
+
+[dependencies.AptosFramework]
+git = "https://github.com/aptos-labs/aptos-core.git"
+rev = "mainnet"
+subdir = "aptos-move/framework/aptos-framework"
+
+[dependencies.AptosTokenObjects]
+git = "https://github.com/aptos-labs/aptos-core.git"
+rev = "mainnet"
+subdir = "aptos-move/framework/aptos-token-objects"
+
+
+[dev-dependencies]
