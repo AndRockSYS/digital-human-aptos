@@ -146,12 +146,12 @@ module digital_human::digital_id {
 
 	#[view]
 	public fun get_digital_token_id(person: address): address acquires DigitalId {
-		assert!(is_digital_human(person), error::not_found(EDigitalIdDoesNotExist));
+		assert!(has_digital_id(person), error::not_found(EDigitalIdDoesNotExist));
 		*&borrow_global<DigitalId>(person).token_id
 	}
 
 	#[view]
-	public fun is_digital_human(person: address): bool {
+	public fun has_digital_id(person: address): bool {
 		exists<DigitalId>(person)
 	}
 }
