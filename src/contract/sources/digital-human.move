@@ -18,8 +18,7 @@ module digital_human::digital_id {
 
 	const EDigitalIdExists: u64 = 0;
 	const EDigitalIdDoesNotExist: u64 = 1;
-
-	const EDataIsAlreadyVerified: u64 = 10;
+	const EDataIsAlreadyVerified: u64 = 2;
 
 	struct State has key, store {
 		signer_cap: SignerCapability,
