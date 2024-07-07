@@ -66,7 +66,7 @@ module digital_human::digital_id {
 		});
 	}
 
-	entry fun create_digital_id(sender: &signer, face_metadata: String) acquires State {
+	entry fun create_digital_id(sender: &signer, hashed_metadata: String) acquires State {
 		assert!(!exists<DigitalId>(signer::address_of(sender)), error::already_exists(EDigitalIdExists));
 
 		let state = borrow_global<State>(@digital_human);
@@ -87,7 +87,7 @@ module digital_human::digital_id {
 		object::transfer_raw(resource_signer, digital_id_address, signer::address_of(sender));
 
 		move_to<DigitalData>(&digital_id_signer, DigitalData {
-			metadata: face_metadata
+			metadata: hashed_metadata
 		});
 
 		move_to<DigitalId>(sender, DigitalId {
@@ -102,7 +102,7 @@ module digital_human::digital_id {
 		});
 	}
 
-	entry fun verify_data(sender: &signer, data_type: String, metadata: String) acquires State, DigitalId {
+	entry fun verify_data(sender: &signer, data_type: String, hashed_metadata: String) acquires State, DigitalId {
 		assert!(exists<DigitalId>(signer::address_of(sender)), error::not_found(EDigitalIdDoesNotExist));
 
 		let digital_id = borrow_global_mut<DigitalId>(signer::address_of(sender));
@@ -135,7 +135,7 @@ module digital_human::digital_id {
 		object::transfer_raw(resource_signer, verified_data_address, *&mut digital_id.token_id);
 
 		move_to<DigitalData>(&verified_data_signer, DigitalData {
-			metadata: metadata
+			metadata: hashed_metadata
 		});
 
 		event::emit(VerifyDigitalIdData {
