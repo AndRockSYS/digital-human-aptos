@@ -8,11 +8,11 @@ import Nav from '@/components/Nav';
 
 import { useEffect, useMemo, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
+import { useWallet } from '@aptos-labs/wallet-adapter-react';
 
 import pageData from './pageData';
 
 import './data.css';
-import { useWallet } from '@aptos-labs/wallet-adapter-react';
 
 export default function DataCollection() {
     const router = useRouter();
