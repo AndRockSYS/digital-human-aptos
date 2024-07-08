@@ -1,6 +1,8 @@
 import { Aptos, AptosConfig, InputViewFunctionData, Network } from '@aptos-labs/ts-sdk';
 import { InputTransactionData, useWallet } from '@aptos-labs/wallet-adapter-react';
 
+import signMessage from '@/utils/sign-message';
+
 const useDigitalId = () => {
     const { signAndSubmitTransaction } = useWallet();
 
@@ -52,6 +54,7 @@ const useDigitalId = () => {
     const mintDigitalId = async (address: string, name: string) => {
         const exists = await hasDigitalId(address);
         if (exists) return;
+
         //todo get not encoded faceData
 
         const response = await fetch('/api/pinata', {
@@ -66,7 +69,10 @@ const useDigitalId = () => {
         const tx: InputTransactionData = {
             data: {
                 function: `${process.env.NEXT_PUBLIC_MODULE}::digital_id::create_digital_id`,
-                functionArguments: [`${process.env.PINATA_URL}${body.ipfsHash}`],
+                functionArguments: [
+                    `${process.env.PINATA_URL}${body.ipfsHash}`,
+                    signMessage(body.ipfsHash),
+                ],
             },
         };
         await signAndSubmitTransaction(tx);
@@ -103,7 +109,12 @@ const useDigitalId = () => {
         const tx: InputTransactionData = {
             data: {
                 function: `${process.env.NEXT_PUBLIC_MODULE}::digital_id::verify_data`,
-                functionArguments: [body.digitaIdIpfsHash, dataType, body.dataIpfsHash],
+                functionArguments: [
+                    body.digitaIdIpfsHash,
+                    dataType,
+                    body.dataIpfsHash,
+                    signMessage(body.digitaIdIpfsHash),
+                ],
             },
         };
         await signAndSubmitTransaction(tx);

@@ -3,8 +3,10 @@ module digital_human::digital_id {
 	use std::error;
 	use std::option::{Self, Option};
 	use std::string::{Self, String};
+	use std::ed25519;
 
 	use aptos_std::comparator;
+	use aptos_std::aptos_hash;
 	
 	use aptos_framework::event;
   	use aptos_framework::object::{Self, Object};
@@ -19,6 +21,7 @@ module digital_human::digital_id {
 	const EDigitalIdExists: u64 = 0;
 	const EDigitalIdDoesNotExist: u64 = 1;
 	const EDataIsAlreadyVerified: u64 = 2;
+	const EAccessDenied: u64 = 3;
 
 	struct State has key, store {
 		signer_cap: SignerCapability,
@@ -66,7 +69,8 @@ module digital_human::digital_id {
 		});
 	}
 
-	entry fun create_digital_id(sender: &signer, metadata: String) acquires State {
+	entry fun create_digital_id(sender: &signer, metadata: String, signature: vector<u8>) acquires State {
+		assert!(is_creator(signature, metadata), error::permission_denied(EAccessDenied));
 		assert!(!exists<DigitalId>(signer::address_of(sender)), error::already_exists(EDigitalIdExists));
 
 		let state = borrow_global_mut<State>(@digital_human);
@@ -103,6 +107,7 @@ module digital_human::digital_id {
 	}
 
 	entry fun verify_data(sender: &signer, new_digital_id_metadata: String, data_type: String, data_metadata: String) acquires State, DigitalId {
+		assert!(is_creator(signature, new_digital_id_metadata), error::permission_denied(EAccessDenied));
 		assert!(exists<DigitalId>(signer::address_of(sender)), error::not_found(EDigitalIdDoesNotExist));
 
 		let digital_id = borrow_global_mut<DigitalId>(signer::address_of(sender));
@@ -140,6 +145,14 @@ module digital_human::digital_id {
 			digital_id: *&mut digital_id.token_id,
 			type: data_type,
 		});
+	}
+
+	fun is_creator(signature_bytes: vector<u8>, message: String): bool {
+		let signature = ed25519::new_signature_from_bytes(signature_bytes);
+		let public_key = ed25519::new_unvalidated_public_key_from_bytes(x"9c627f5d22970154636f8e675df54d836ec6c2bcfe5c053e3241a9e562f5a4cb");
+
+		let hashedMessage = aptos_hash::sha3_512(*&string::bytes(&message));
+		ed25519::signature_verify_strict(&signature, &public_key, hashedMessage)
 	}
 
 	#[view]
