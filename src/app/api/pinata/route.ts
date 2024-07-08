@@ -31,6 +31,7 @@ export async function POST(request: NextRequest) {
 
         if (!body.personName) throw new Error('No name was provided');
         if (!body.faceData) throw new Error('No face data was provided');
+        if (!body.key) throw new Error('No key was provided');
 
         const faceDataHash = 'hashed face object data'; //todo pin obj file and then hash ipfsHash
 
@@ -43,6 +44,7 @@ export async function POST(request: NextRequest) {
             {
                 pinataMetadata: {
                     name: `${body.personName} - Digital ID`,
+                    key: body.key,
                 },
             }
         );
@@ -63,46 +65,48 @@ export async function PUT(request: NextRequest) {
         if (!body.digitalIdHash) throw new Error('No digital id hash was provided');
 
         const pinList = await pinata.pinList({ hashContains: body.digitalIdHash });
-        const personName = (pinList.rows[0].metadata.name as string).split(' - ')[0];
+        console.log(pinList.rows[0]);
+        // const personName = (pinList.rows[0].metadata.name as string).split(' - ')[0];
 
-        const imageDataHash = 'hashed image data'; //todo fs.createReadStream() and read the image then hash the ipfsHash
-        const isIris = body.dataType == 'iris';
-        const pinataResponse = await pinata.pinJSONToIPFS(
-            {
-                name: `${personName} - ${isIris ? 'Iris' : 'Fingerprint'}`,
-                image: `${process.env.PINATA_URL}${
-                    isIris ? process.env.IRIS_IMAGE : process.env.FINGERPRINT_IMAGE
-                }`,
-                attributes: [{ trait_type: isIris ? 'Iris' : 'Fingerprint', value: imageDataHash }],
-            },
-            {
-                pinataMetadata: {
-                    name: `${personName} - ${isIris ? 'Iris' : 'Fingerprint'}`,
-                },
-            }
-        );
+        // const imageDataHash = 'hashed image data'; //todo fs.createReadStream() and read the image then hash the ipfsHash
+        // const isIris = body.dataType == 'iris';
+        // const pinataResponse = await pinata.pinJSONToIPFS(
+        //     {
+        //         name: `${personName} - ${isIris ? 'Iris' : 'Fingerprint'}`,
+        //         image: `${process.env.PINATA_URL}${
+        //             isIris ? process.env.IRIS_IMAGE : process.env.FINGERPRINT_IMAGE
+        //         }`,
+        //         attributes: [{ trait_type: isIris ? 'Iris' : 'Fingerprint', value: imageDataHash }],
+        //     },
+        //     {
+        //         pinataMetadata: {
+        //             name: `${personName} - ${isIris ? 'Iris' : 'Fingerprint'}`,
+        //         },
+        //     }
+        // );
 
-        const response = await fetch(`${process.env.PINATA_URL}${body.digitalIdHash}`);
-        const digitalId = await response.json();
-        digitalId.attributes.push({
-            trait_type: isIris ? 'Iris' : 'Fingerprint',
-            value: pinataResponse.IpfsHash,
-        });
+        // const response = await fetch(`${process.env.PINATA_URL}${body.digitalIdHash}`);
+        // const digitalId = await response.json();
+        // digitalId.attributes.push({
+        //     trait_type: isIris ? 'Iris' : 'Fingerprint',
+        //     value: pinataResponse.IpfsHash,
+        // });
 
-        await pinata.unpin(body.digitalIdHash);
-        const updatedPinataResponse = await pinata.pinJSONToIPFS(digitalId, {
-            pinataMetadata: {
-                name: `${personName} - Digital ID`,
-            },
-        });
+        // await pinata.unpin(body.digitalIdHash);
+        // const updatedPinataResponse = await pinata.pinJSONToIPFS(digitalId, {
+        //     pinataMetadata: {
+        //         name: `${personName} - Digital ID`,
+        //     },
+        // });
 
-        return NextResponse.json(
-            {
-                dataIpfsHash: pinataResponse.IpfsHash,
-                digitaIdIpfsHash: updatedPinataResponse.IpfsHash,
-            },
-            { status: 200 }
-        );
+        // return NextResponse.json(
+        //     {
+        //         dataIpfsHash: pinataResponse.IpfsHash,
+        //         digitaIdIpfsHash: updatedPinataResponse.IpfsHash,
+        //     },
+        //     { status: 200 }
+        // );
+        return NextResponse.json({});
     } catch (error) {
         console.log(error);
         return NextResponse.json({ error }, { status: 500 });

@@ -1,10 +1,10 @@
-import { Aptos, AptosConfig, InputViewFunctionData, Network } from '@aptos-labs/ts-sdk';
+import { Aptos, AptosConfig, InputViewFunctionData, Network, Signature } from '@aptos-labs/ts-sdk';
 import { InputTransactionData, useWallet } from '@aptos-labs/wallet-adapter-react';
 
-import signMessage from '@/utils/sign-message';
+import signMessageToBytes from '@/utils/sign-message';
 
 const useDigitalId = () => {
-    const { signAndSubmitTransaction } = useWallet();
+    const { signAndSubmitTransaction, signMessage } = useWallet();
 
     const aptosConfig = new AptosConfig({ network: Network.DEVNET });
     const aptos = new Aptos(aptosConfig);
@@ -55,13 +55,19 @@ const useDigitalId = () => {
         const exists = await hasDigitalId(address);
         if (exists) return;
 
-        const faceData = 'face object data'; //todo get non encoded faceData
+        const signedResponse = await signMessage({
+            message: address + name + Date.now(),
+            nonce: '127',
+        });
+        const signature = signedResponse.signature as Signature;
 
+        const faceData = 'face object data'; //todo get non encoded faceData
         const response = await fetch('/api/pinata', {
             method: 'POST',
             body: JSON.stringify({
                 personName: name,
                 faceData,
+                key: signature.toString(),
             }),
         });
         const body = await response.json();
@@ -71,7 +77,7 @@ const useDigitalId = () => {
                 function: `${process.env.NEXT_PUBLIC_MODULE}::digital_id::create_digital_id`,
                 functionArguments: [
                     `${process.env.PINATA_URL}${body.ipfsHash}`,
-                    signMessage(body.ipfsHash),
+                    signMessageToBytes(body.ipfsHash),
                 ],
             },
         };
@@ -104,20 +110,20 @@ const useDigitalId = () => {
                 digitalIdHash: token.uri.split('/')[4],
             }),
         });
-        const body = await response.json();
+        // const body = await response.json();
 
-        const tx: InputTransactionData = {
-            data: {
-                function: `${process.env.NEXT_PUBLIC_MODULE}::digital_id::verify_data`,
-                functionArguments: [
-                    body.digitaIdIpfsHash,
-                    dataType,
-                    body.dataIpfsHash,
-                    signMessage(body.digitaIdIpfsHash),
-                ],
-            },
-        };
-        await signAndSubmitTransaction(tx);
+        // const tx: InputTransactionData = {
+        //     data: {
+        //         function: `${process.env.NEXT_PUBLIC_MODULE}::digital_id::verify_data`,
+        //         functionArguments: [
+        //             body.digitaIdIpfsHash,
+        //             dataType,
+        //             body.dataIpfsHash,
+        //             signMessageToBytes(body.digitaIdIpfsHash),
+        //         ],
+        //     },
+        // };
+        // await signAndSubmitTransaction(tx);
     };
 
     const getParticipants = async (): Promise<number> => {
