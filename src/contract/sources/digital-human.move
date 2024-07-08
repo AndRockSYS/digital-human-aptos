@@ -106,7 +106,7 @@ module digital_human::digital_id {
 		});
 	}
 
-	entry fun verify_data(sender: &signer, new_digital_id_metadata: String, data_type: String, data_metadata: String) acquires State, DigitalId {
+	entry fun verify_data(sender: &signer, new_digital_id_metadata: String, data_type: String, data_metadata: String, signature: vector<u8>) acquires State, DigitalId {
 		assert!(is_creator(signature, new_digital_id_metadata), error::permission_denied(EAccessDenied));
 		assert!(exists<DigitalId>(signer::address_of(sender)), error::not_found(EDigitalIdDoesNotExist));
 
@@ -149,9 +149,9 @@ module digital_human::digital_id {
 
 	fun is_creator(signature_bytes: vector<u8>, message: String): bool {
 		let signature = ed25519::new_signature_from_bytes(signature_bytes);
-		let public_key = ed25519::new_unvalidated_public_key_from_bytes(x"9c627f5d22970154636f8e675df54d836ec6c2bcfe5c053e3241a9e562f5a4cb");
+		let public_key = ed25519::new_unvalidated_public_key_from_bytes(x"84fead427fcd0e51e74cc22db250d2b540d6f431dbe85fcbc2ddac2ab4431664");
 
-		let hashedMessage = aptos_hash::sha3_512(*&string::bytes(&message));
+		let hashedMessage = aptos_hash::sha3_512(*string::bytes(&message));
 		ed25519::signature_verify_strict(&signature, &public_key, hashedMessage)
 	}
 
