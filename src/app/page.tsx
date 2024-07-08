@@ -5,6 +5,9 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 import useDigitalId from '@/hooks/useDigitalId';
+import { World } from '@/components/ui/globe';
+
+import { arcs, globeConfig } from '@/data/globe-data';
 
 import './home.css';
 
@@ -30,13 +33,7 @@ export default function Home() {
                 <button id='gray-button'>Connect Identity</button>
             </div>
             <div className='participants'>{participants} unique humans participated</div>
-            <Image
-                className='planet'
-                src='/images/planet.png'
-                alt='planet'
-                width={1280}
-                height={362}
-            />
+            <World globeConfig={globeConfig} data={arcs} />
         </main>
     );
 }
