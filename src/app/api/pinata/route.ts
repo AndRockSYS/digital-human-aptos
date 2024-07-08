@@ -8,6 +8,25 @@ const pinata = new PinataSDK({
     pinataSecretApiKey: process.env.PINATA_SECRET,
 });
 
+export async function GET(request: NextRequest) {
+    try {
+        const url = new URL(request.url);
+        const searchParams = new URLSearchParams(url.searchParams);
+
+        console.log(searchParams.get('ipfsHash') as string);
+
+        const pinList = await pinata.pinList({
+            hashContains: searchParams.get('ipfsHash') as string,
+        });
+        const name = (pinList.rows[0].metadata.name as string).split(' - ')[0];
+
+        return NextResponse.json({ name }, { status: 200 });
+    } catch (error) {
+        console.log(error);
+        return NextResponse.json({ error, name: 'Null' }, { status: 500 });
+    }
+}
+
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
