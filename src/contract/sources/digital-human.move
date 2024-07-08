@@ -12,7 +12,7 @@ module digital_human::digital_id {
 	use aptos_framework::account::{Self, SignerCapability};
 	use aptos_framework::resource_account;
 
-	use aptos_token_objects::token::{Self, MutatofRef};
+	use aptos_token_objects::token::{Self, MutatorRef};
 	use aptos_token_objects::collection::{Self, Collection};
 	use aptos_token_objects::royalty::{Royalty};
 
@@ -30,7 +30,7 @@ module digital_human::digital_id {
 		iris: Option<address>,
 		fingerprint: Option<address>,
 
-		mutator_ref: MutatofRef
+		mutator_ref: MutatorRef
 	}
 
 	#[event]
@@ -51,10 +51,10 @@ module digital_human::digital_id {
 
 		let constructor_ref = &collection::create_unlimited_collection(
 			resource, 
-			string::utf8(b"Test Description"), 
-			string::utf8(b"Test Name"), 
+			string::utf8(b"Digital Human Project on Aptos"), 
+			string::utf8(b"Digital Human"), 
 			option::none<Royalty>(),
-			string::utf8(b"Collection URI")
+			string::utf8(b"URI")
 		);
 
 		move_to<State>(resource, State {
@@ -114,7 +114,7 @@ module digital_human::digital_id {
 			string::utf8(if (is_iris) b"Verified Iris Data" else b"Verified Fingerprint Data"), 
 			string::utf8(if (is_iris) b"Iris" else b"Fingerprint"), 
 			option::none<Royalty>(), 
-			metadata
+			data_metadata
 		);
 
 		let verified_data_signer = object::generate_signer(&constructor_ref);
