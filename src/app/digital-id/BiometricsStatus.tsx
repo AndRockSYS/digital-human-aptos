@@ -20,7 +20,7 @@ export default function BiometricsStatus({ name, objectAddress }: Props) {
                 <h6 style={{ color: objectAddress ? '' : 'var(--light-gray)' }}>{name}</h6>
             </div>
 
-            {!objectAddress ? (
+            {objectAddress ? (
                 <div className='status'>
                     <Image src={`/icons/verified.png`} alt='verified' height={16} width={16} />
                     <Link

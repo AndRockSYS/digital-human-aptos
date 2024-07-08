@@ -55,13 +55,13 @@ const useDigitalId = () => {
         const exists = await hasDigitalId(address);
         if (exists) return;
 
-        //todo get not encoded faceData
+        const faceData = 'face object data'; //todo get non encoded faceData
 
         const response = await fetch('/api/pinata', {
             method: 'POST',
             body: JSON.stringify({
                 personName: name,
-                faceData: 'proceeded face data',
+                faceData,
             }),
         });
         const body = await response.json();
@@ -82,8 +82,6 @@ const useDigitalId = () => {
         const exists = await hasDigitalId(address);
         if (!exists) return;
 
-        //todo get not encoded data image
-
         const resource = await aptos.getAccountResource({
             accountAddress: address,
             resourceType: `0x${process.env.NEXT_PUBLIC_MODULE}::digital_id::DigitalId`,
@@ -96,11 +94,13 @@ const useDigitalId = () => {
             resourceType: '0x4::token::Token',
         });
 
+        const image = 'image'; //todo get non encoded image data
+
         const response = await fetch('/api/pinata', {
             method: 'PUT',
             body: JSON.stringify({
                 dataType,
-                image: 'some image of iris or fingerprint',
+                image,
                 digitalIdHash: token.uri.split('/')[4],
             }),
         });

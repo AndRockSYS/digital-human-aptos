@@ -13,8 +13,6 @@ export async function GET(request: NextRequest) {
         const url = new URL(request.url);
         const searchParams = new URLSearchParams(url.searchParams);
 
-        console.log(searchParams.get('ipfsHash') as string);
-
         const pinList = await pinata.pinList({
             hashContains: searchParams.get('ipfsHash') as string,
         });
@@ -34,7 +32,7 @@ export async function POST(request: NextRequest) {
         if (!body.personName) throw new Error('No name was provided');
         if (!body.faceData) throw new Error('No face data was provided');
 
-        const faceDataHash = 'some face data hash'; //todo pin obj file and then hash ipfsHash
+        const faceDataHash = 'hashed face object data'; //todo pin obj file and then hash ipfsHash
 
         const pinataResponse = await pinata.pinJSONToIPFS(
             {
@@ -67,7 +65,7 @@ export async function PUT(request: NextRequest) {
         const pinList = await pinata.pinList({ hashContains: body.digitalIdHash });
         const personName = (pinList.rows[0].metadata.name as string).split(' - ')[0];
 
-        const imageDataHash = 'some hash'; //todo fs.createReadStream() and read the image then hash the ipfsHash
+        const imageDataHash = 'hashed image data'; //todo fs.createReadStream() and read the image then hash the ipfsHash
         const isIris = body.dataType == 'iris';
         const pinataResponse = await pinata.pinJSONToIPFS(
             {
