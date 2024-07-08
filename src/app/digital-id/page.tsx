@@ -2,15 +2,23 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+
+import { useWallet } from '@aptos-labs/wallet-adapter-react';
 
 import BiometricsMethod from './BiometricsMethod';
-import Nav from '../../components/Nav';
-import { useWallet } from '@aptos-labs/wallet-adapter-react';
+import Nav from '@/components/Nav';
 
 import './digital-id.css';
 
 export default function DigitalHuman() {
-    const { account } = useWallet();
+    const router = useRouter();
+    const { account, connected } = useWallet();
+
+    useEffect(() => {
+        if (!connected) router.push('/');
+    }, [connected]);
 
     return (
         <main className='digital-id'>
