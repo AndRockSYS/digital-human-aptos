@@ -51,7 +51,7 @@ const useDigitalId = () => {
         return digitalId;
     };
 
-    const mintDigitalId = async (address: string, name: string) => {
+    const createDigitalId = async (address: string, name: string) => {
         const exists = await hasDigitalId(address);
         if (exists) return;
 
@@ -84,7 +84,11 @@ const useDigitalId = () => {
         await signAndSubmitTransaction(tx);
     };
 
-    const verifyDigitalData = async (address: string, dataType: 'iris' | 'fingerprint') => {
+    const verifyDigitalData = async (
+        address: string,
+        dataType: 'iris' | 'fingerprint',
+        file: File
+    ) => {
         const exists = await hasDigitalId(address);
         if (!exists) return;
 
@@ -134,7 +138,7 @@ const useDigitalId = () => {
         return response[0] ? Number(response[0]) : 0;
     };
 
-    return { hasDigitalId, mintDigitalId, verifyDigitalData, getParticipants, getDigitalId };
+    return { hasDigitalId, createDigitalId, verifyDigitalData, getParticipants, getDigitalId };
 };
 
 export default useDigitalId;

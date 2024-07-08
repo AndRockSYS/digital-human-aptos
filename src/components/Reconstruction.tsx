@@ -1,13 +1,16 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
 
 import { useWallet } from '@aptos-labs/wallet-adapter-react';
 
-export default function ReconstructionProcess() {
-    const router = useRouter();
+interface Props {
+    createDigitalId: (address: string, name: string) => Promise<void>;
+    setFinished: Dispatch<SetStateAction<boolean>>;
+}
+
+export default function Reconstruction({ createDigitalId, setFinished }: Props) {
     const { account } = useWallet();
 
     const [stage, setStage] = useState(1);
@@ -17,6 +20,8 @@ export default function ReconstructionProcess() {
     //other - minting, last stage
 
     const [name, setName] = useState('');
+
+    //todo execute all the API stuff here and change stage considering that
 
     useEffect(() => {
         new Promise((resolve) => setTimeout(resolve, 5000)).then(async () => {
@@ -69,13 +74,11 @@ export default function ReconstructionProcess() {
                             </h6>
                             <button
                                 id='green-button'
-                                onClick={() => {
+                                onClick={async () => {
                                     if (!name) return;
                                     setStage(4);
-                                    //todo await for minting request
-                                    new Promise((resolve) => setTimeout(resolve, 3000)).then(() =>
-                                        router.push('/digital-id')
-                                    );
+                                    await createDigitalId(account?.address as string, name);
+                                    setFinished(true);
                                 }}
                             >
                                 <Image src='/icons/aptos.svg' alt='aptos' width={20} height={20} />
@@ -96,7 +99,7 @@ export default function ReconstructionProcess() {
     );
 }
 
-interface Props {
+interface StageProps {
     header: string;
     address?: string;
     description: string;
@@ -105,7 +108,7 @@ interface Props {
     name?: string;
 }
 
-function Stage({ header, address, description, time, name }: Props) {
+function Stage({ header, address, description, time, name }: StageProps) {
     return (
         <section className='process'>
             <Image id='gray-logo' src='/icons/logo.svg' alt='logo' width={43} height={39} />

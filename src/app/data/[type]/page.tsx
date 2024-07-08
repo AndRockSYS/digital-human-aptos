@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import ProcessingPopup from '@/components/ProcessingPopup';
+import ConfirmingPopup from '@/components/ConfirmingPopup';
 import Nav from '@/components/Nav';
 
 import { useEffect, useMemo, useState } from 'react';
@@ -22,11 +22,13 @@ export default function DataCollection() {
     const { connected } = useWallet();
 
     const [file, setFile] = useState<File | undefined>(undefined);
-    const [verification, setVerification] = useState(false);
+
+    const [confirming, setConfirming] = useState(false);
+    const [finished, setFinished] = useState(false);
 
     useEffect(() => {
-        if (!connected) router.push('/');
-    }, [connected]);
+        if (!connected || finished) router.push('/');
+    }, [connected, finished]);
 
     return (
         <main className='data'>
@@ -80,7 +82,7 @@ export default function DataCollection() {
                     [file]
                 )}
 
-                <Link href={'/'}>Available Soon</Link>
+                <Link href={''}>Available Soon</Link>
                 {useMemo(
                     () => (
                         <Image
@@ -89,7 +91,7 @@ export default function DataCollection() {
                             alt='next'
                             height={72}
                             width={72}
-                            onClick={() => (file ? setVerification(true) : {})}
+                            onClick={() => (file ? setConfirming(true) : {})}
                             style={file ? {} : { pointerEvents: 'none', opacity: '30%' }}
                         />
                     ),
@@ -99,16 +101,17 @@ export default function DataCollection() {
             </section>
             {useMemo(
                 () =>
-                    verification ? (
-                        <ProcessingPopup
+                    confirming ? (
+                        <ConfirmingPopup
                             dataType={dataType}
-                            mintingFunction={async () => {}}
-                            setVerification={setVerification}
+                            setConfirming={setConfirming}
+                            setFinished={setFinished}
+                            file={file}
                         />
                     ) : (
                         <></>
                     ),
-                [verification]
+                [confirming]
             )}
         </main>
     );
