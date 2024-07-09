@@ -17,6 +17,7 @@
     "clsx": "^2.1.1",
     "crypto-js": "^4.2.0",
     "framer-motion": "^11.2.13",
+    "js-sha3": "^0.9.3",
     "next": "14.2.4",
     "petra-plugin-wallet-adapter": "^0.4.5",
     "react": "^18",
