@@ -61,7 +61,9 @@ export default function ConfirmingPopup({ dataType, file, setConfirming, setFini
                                 account.address,
                                 dataType == 'iris' ? 'iris' : 'fingerprint',
                                 Buffer.from(await file.arrayBuffer())
-                            );
+                            ).catch((error) => {
+                                alert('An error occured ' + error);
+                            });
                             setFinished(true);
                         }
                     }}
