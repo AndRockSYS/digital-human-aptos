@@ -18,7 +18,7 @@ export async function GET() {
 
         return NextResponse.json({ state }, { status: 200 });
     } catch (error) {
-        return NextResponse.json({ error }, { status: 500 });
+        return NextResponse.json({ error: `An error occured ${error}` }, { status: 500 });
     }
 }
 
@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
 
         return body.action == 'start' ? await startServer() : await stopServer();
     } catch (error) {
-        return NextResponse.json({ error }, { status: 500 });
+        return NextResponse.json({ error: `An error occured ${error}` }, { status: 500 });
     }
 }
 
