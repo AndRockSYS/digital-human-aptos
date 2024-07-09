@@ -10,6 +10,10 @@ const nextConfig = {
         ID_IMAGE: 'QmXW4ojVRb7QxzSZJp8qGRsNqJXxHvQGQDfDR43KsGS1RJ',
         IRIS_IMAGE: 'QmfRu5WbaeFrZhAL73bgkuoEMz7GsdYKLkEkLvcyx68B4r',
         FINGERPRINT_IMAGE: 'QmSkHHy2Jyiw9EDCV611hmdj9fvHbfQcx6YY5QKsGap7CB',
+
+        AWS_URL: 'https://28g5pjoyra.execute-api.ap-southeast-1.amazonaws.com/prod/flaskapp',
+        AWS_TOKEN: 'blendAVAX2024',
+        API_URL: 'https://blend-server.vercel.app/aws',
     },
 };
 

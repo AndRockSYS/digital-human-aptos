@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const url = 'https://28g5pjoyra.execute-api.ap-southeast-1.amazonaws.com/prod/flaskapp';
+const url = process.env.AWS_URL as string;
 
-const authorizationToken = 'blendAVAX2024';
 const requestHeaders = new Headers();
-requestHeaders.set('authorizationToken', authorizationToken);
+requestHeaders.set('authorizationToken', process.env.AWS_TOKEN as string);
 
 export async function GET() {
     try {
