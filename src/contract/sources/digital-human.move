@@ -6,8 +6,7 @@ module digital_human::digital_id {
 	use std::ed25519;
 
 	use aptos_std::comparator;
-	use aptos_std::aptos_hash;
-	
+
 	use aptos_framework::event;
   	use aptos_framework::object::{Self, Object};
 
@@ -151,8 +150,7 @@ module digital_human::digital_id {
 		let signature = ed25519::new_signature_from_bytes(signature_bytes);
 		let public_key = ed25519::new_unvalidated_public_key_from_bytes(x"84fead427fcd0e51e74cc22db250d2b540d6f431dbe85fcbc2ddac2ab4431664");
 
-		let hashedMessage = aptos_hash::sha3_512(*string::bytes(&message));
-		ed25519::signature_verify_strict(&signature, &public_key, hashedMessage)
+		ed25519::signature_verify_strict(&signature, &public_key, *string::bytes(&message))
 	}
 
 	#[view]
