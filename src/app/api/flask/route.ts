@@ -41,11 +41,11 @@ async function stopServer() {
     });
 
     if (response.status != 200)
-        return NextResponse.json({ error: 'Server Error' }, { status: response.status });
+        return NextResponse.json({ error: 'Server Error' }, { status: 500 });
 
     const doubleCheck = await GET();
     if ((await doubleCheck.json()).state != 'stopping')
-        return NextResponse.json({ message: 'Working' }, { status: 409 });
+        return NextResponse.json({ message: 'Still Working' }, { status: 500 });
 
     return NextResponse.json({ message: 'Stopping' }, { status: 200 });
 }
@@ -57,7 +57,7 @@ async function startServer() {
     });
 
     if (response.status != 200)
-        return NextResponse.json({ error: 'Server Error' }, { status: response.status });
+        return NextResponse.json({ error: 'Server Error' }, { status: 500 });
 
-    return NextResponse.json({ message: 'Working' }, { status: 200 });
+    return NextResponse.json({ message: 'Starting' }, { status: 200 });
 }
