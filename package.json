@@ -15,6 +15,7 @@
     "@react-three/drei": "^9.108.3",
     "@react-three/fiber": "^8.16.8",
     "clsx": "^2.1.1",
+    "crypto-js": "^4.2.0",
     "framer-motion": "^11.2.13",
     "next": "14.2.4",
     "petra-plugin-wallet-adapter": "^0.4.5",
@@ -25,6 +26,7 @@
     "three-globe": "^2.31.1"
   },
   "devDependencies": {
+    "@types/crypto-js": "^4.2.2",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
