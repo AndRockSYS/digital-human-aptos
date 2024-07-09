@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
         if (!body.faceData) throw new Error('No face data was provided');
         if (!body.key) throw new Error('No key was provided');
 
-        const faceDataHashed = pinAndEncrypt(body.faceData.data, body.personName, body.key);
+        const faceDataHashed = await pinAndEncrypt(body.faceData.data, body.personName, body.key);
         const pinataResponse = await pinata.pinJSONToIPFS(
             {
                 name: 'Digital ID',
@@ -79,7 +79,7 @@ export async function PUT(request: NextRequest) {
         const personName = (pinList.rows[0].metadata.name as string).split(' - ')[0];
         const key = (pinList.rows[0].metadata.keyvalues as any).key;
 
-        const imageDataHash = pinAndEncrypt(body.image.data, personName, key);
+        const imageDataHash = await pinAndEncrypt(body.image.data, personName, key);
         const isIris = body.dataType == 'iris';
         const pinataResponse = await pinata.pinJSONToIPFS(
             {
