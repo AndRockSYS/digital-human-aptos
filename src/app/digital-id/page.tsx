@@ -22,8 +22,9 @@ export default function DigitalHuman() {
 
     useEffect(() => {
         if (!connected) router.push('/');
-        else getDigitalId(account?.address as string).then((data) => setDigitalId(data));
-    }, [connected]);
+        if (connected && account)
+            getDigitalId(account.address as string).then((data) => setDigitalId(data));
+    }, [connected, account]);
 
     return (
         <main className='digital-id'>
