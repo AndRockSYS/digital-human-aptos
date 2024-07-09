@@ -50,8 +50,8 @@ const useDigitalId = () => {
 
         return digitalId;
     };
-
-    const createDigitalId = async (address: string, name: string) => {
+    //todo get actual face.obj file from API
+    const createDigitalId = async (address: string, name: string, faceData: Buffer) => {
         const exists = await hasDigitalId(address);
         if (exists) return;
 
@@ -61,7 +61,6 @@ const useDigitalId = () => {
         });
         const signature = signedResponse.signature as Signature;
 
-        const faceData = 'face object data'; //todo get non encoded faceData
         const response = await fetch('/api/pinata', {
             method: 'POST',
             body: JSON.stringify({
@@ -87,7 +86,7 @@ const useDigitalId = () => {
     const verifyDigitalData = async (
         address: string,
         dataType: 'iris' | 'fingerprint',
-        file: File
+        image: Buffer
     ) => {
         const exists = await hasDigitalId(address);
         if (!exists) return;
@@ -104,8 +103,6 @@ const useDigitalId = () => {
             resourceType: '0x4::token::Token',
         });
 
-        const image = 'image'; //todo get non encoded image data
-
         const response = await fetch('/api/pinata', {
             method: 'PUT',
             body: JSON.stringify({
@@ -114,20 +111,20 @@ const useDigitalId = () => {
                 digitalIdHash: token.uri.split('/')[4],
             }),
         });
-        // const body = await response.json();
+        const body = await response.json();
 
-        // const tx: InputTransactionData = {
-        //     data: {
-        //         function: `${process.env.NEXT_PUBLIC_MODULE}::digital_id::verify_data`,
-        //         functionArguments: [
-        //             body.digitaIdIpfsHash,
-        //             dataType,
-        //             body.dataIpfsHash,
-        //             signMessageToBytes(body.digitaIdIpfsHash),
-        //         ],
-        //     },
-        // };
-        // await signAndSubmitTransaction(tx);
+        const tx: InputTransactionData = {
+            data: {
+                function: `${process.env.NEXT_PUBLIC_MODULE}::digital_id::verify_data`,
+                functionArguments: [
+                    body.digitaIdIpfsHash,
+                    dataType,
+                    body.dataIpfsHash,
+                    signMessageToBytes(body.digitaIdIpfsHash),
+                ],
+            },
+        };
+        await signAndSubmitTransaction(tx);
     };
 
     const getParticipants = async (): Promise<number> => {
