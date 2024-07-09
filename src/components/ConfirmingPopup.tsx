@@ -54,13 +54,13 @@ export default function ConfirmingPopup({ dataType, file, setConfirming, setFini
                     id='green-button'
                     onClick={async () => {
                         if (!account || !file) return;
-
                         setExecuting(true);
+
                         if (!isFace) {
                             await verifyDigitalData(
                                 account.address,
                                 dataType == 'iris' ? 'iris' : 'fingerprint',
-                                file
+                                Buffer.from(await file.arrayBuffer())
                             );
                             setFinished(true);
                         }
@@ -72,10 +72,11 @@ export default function ConfirmingPopup({ dataType, file, setConfirming, setFini
             {useMemo(
                 () =>
                     executing ? (
-                        isFace ? (
+                        isFace && file ? (
                             <Reconstruction
                                 createDigitalId={createDigitalId}
                                 setFinished={setFinished}
+                                file={file}
                             />
                         ) : (
                             <Verification dataType={dataType} address={account?.address} />
@@ -83,7 +84,7 @@ export default function ConfirmingPopup({ dataType, file, setConfirming, setFini
                     ) : (
                         <></>
                     ),
-                [executing]
+                [executing, file]
             )}
         </>
     );

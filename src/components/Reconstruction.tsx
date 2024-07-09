@@ -6,11 +6,12 @@ import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
 import { useWallet } from '@aptos-labs/wallet-adapter-react';
 
 interface Props {
-    createDigitalId: (address: string, name: string) => Promise<void>;
+    createDigitalId: (address: string, name: string, faceData: Buffer) => Promise<void>;
     setFinished: Dispatch<SetStateAction<boolean>>;
+    file: File;
 }
 
-export default function Reconstruction({ createDigitalId, setFinished }: Props) {
+export default function Reconstruction({ createDigitalId, setFinished, file }: Props) {
     const { account } = useWallet();
 
     const [stage, setStage] = useState(1);
@@ -24,9 +25,9 @@ export default function Reconstruction({ createDigitalId, setFinished }: Props) 
     //todo execute all the API stuff here and change stage considering that
 
     useEffect(() => {
-        new Promise((resolve) => setTimeout(resolve, 5000)).then(async () => {
+        new Promise((resolve) => setTimeout(resolve, 1000)).then(async () => {
             setStage(2);
-            await new Promise((resolve) => setTimeout(resolve, 5000));
+            await new Promise((resolve) => setTimeout(resolve, 1000));
             setStage(3);
         });
     }, []);
@@ -77,7 +78,11 @@ export default function Reconstruction({ createDigitalId, setFinished }: Props) 
                                 onClick={async () => {
                                     if (!name) return;
                                     setStage(4);
-                                    await createDigitalId(account?.address as string, name);
+                                    await createDigitalId(
+                                        account?.address as string,
+                                        name,
+                                        Buffer.from(await file.arrayBuffer())
+                                    );
                                     setFinished(true);
                                 }}
                             >
