@@ -31,7 +31,6 @@ export async function POST(request: NextRequest) {
 
         return body.action == 'start' ? await startServer() : await stopServer();
     } catch (error) {
-        console.log(error);
         return NextResponse.json({ error }, { status: 500 });
     }
 }
