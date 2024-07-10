@@ -64,13 +64,14 @@ const useDigitalId = () => {
         });
         const signature = signedResponse.signature as Signature;
 
+        const formData = new FormData();
+        formData.append('faceData', new Blob([faceData]));
+        formData.append('personName', name);
+        formData.append('key', signature.toString());
+
         const response = await fetch('/api/pinata', {
             method: 'POST',
-            body: JSON.stringify({
-                personName: name,
-                faceData,
-                key: signature.toString(),
-            }),
+            body: formData,
         });
         if (response.status != 200) return;
         const body = await response.json();

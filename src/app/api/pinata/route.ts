@@ -39,17 +39,17 @@ export async function GET(request: NextRequest) {
 let tries = 1;
 export async function POST(request: NextRequest) {
     try {
-        const body: {
-            personName: string;
-            faceData: any;
-            key: string;
-        } = await request.json();
+        const formData = await request.formData();
+        const personName = formData.get('personName') as string;
+        const key = formData.get('key') as string;
+        const faceData = formData.get('faceData') as Blob;
 
-        if (!body.personName) throw new Error('No name was provided');
-        if (!body.faceData) throw new Error('No face data was provided');
-        if (!body.key) throw new Error('No key was provided');
+        if (!personName) throw new Error('No name was provided');
+        if (!faceData) throw new Error('No face data was provided');
+        if (!key) throw new Error('No key was provided');
 
-        const faceDataHashed = await pinAndEncrypt(body.faceData.data, body.personName, body.key);
+        const buffer = await faceData.arrayBuffer();
+        const faceDataHashed = await pinAndEncrypt(Buffer.from(buffer), personName, key);
         const pinataResponse = await pinata.pinJSONToIPFS(
             {
                 name: 'Digital ID',
@@ -58,10 +58,10 @@ export async function POST(request: NextRequest) {
             },
             {
                 pinataMetadata: {
-                    name: `${body.personName} - Digital ID`,
+                    name: `${personName} - Digital ID`,
                     // @ts-ignore
                     keyvalues: {
-                        key: body.key,
+                        key: key,
                     },
                 },
             }
