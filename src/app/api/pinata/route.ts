@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import PinataSDK from '@pinata/sdk';
 import { Readable } from 'stream';
 
-import { encrypt } from '@/utils/crypto-utils';
+import { encrypt, decrypt } from '@/utils/crypto-utils';
 
 const pinata = new PinataSDK({
     pinataApiKey: process.env.PINATA_API,
@@ -14,15 +14,25 @@ export async function GET(request: NextRequest) {
     try {
         const url = new URL(request.url);
         const searchParams = new URLSearchParams(url.searchParams);
+        const ipfsHash = searchParams.get('ipfsHash') as string;
 
         const pinList = await pinata.pinList({
-            hashContains: searchParams.get('ipfsHash') as string,
+            hashContains: ipfsHash,
         });
         const name = (pinList.rows[0].metadata.name as string).split(' - ')[0];
+        const key = (pinList.rows[0].metadata.keyvalues as any).key as string;
 
-        return NextResponse.json({ name }, { status: 200 });
+        const response = await fetch(`${process.env.PINATA_URL}${ipfsHash}`);
+        const digitalId = await response.json();
+
+        const objHash = decrypt(digitalId.attributes[0].value, key);
+        return NextResponse.json(
+            { name, objLink: `${process.env.PINATA_URL}${objHash}` },
+            { status: 200 }
+        );
     } catch (error) {
-        return NextResponse.json({ error, name: 'Null' }, { status: 500 });
+        console.log(error);
+        return NextResponse.json({ error, name: 'Null', objLink: '' }, { status: 500 });
     }
 }
 
@@ -58,6 +68,7 @@ export async function POST(request: NextRequest) {
 
         return NextResponse.json({ ipfsHash: pinataResponse.IpfsHash }, { status: 200 });
     } catch (error) {
+        console.log(error);
         return NextResponse.json({ error }, { status: 500 });
     }
 }
@@ -107,6 +118,10 @@ export async function PUT(request: NextRequest) {
         const updatedPinataResponse = await pinata.pinJSONToIPFS(digitalId, {
             pinataMetadata: {
                 name: `${personName} - Digital ID`,
+                // @ts-ignore
+                keyvalues: {
+                    key,
+                },
             },
         });
 

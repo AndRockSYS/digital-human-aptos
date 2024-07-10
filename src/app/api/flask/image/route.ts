@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
         const json = await response.json();
 
         return NextResponse.json(
-            { link: action == 'upload' ? json.s3_url : json.imageURL },
+            { link: action == 'send' ? json.s3_url : json.imageURL },
             { status: 200 }
         );
     } catch (error) {
