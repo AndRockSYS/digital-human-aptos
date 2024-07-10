@@ -33,7 +33,9 @@ export default function Home() {
                     <Image src='/icons/aptos.svg' alt='aptos' width={20} height={20} />
                     Generate Identity
                 </Link>
-                <button id='gray-button'>Connect Identity</button>
+                <Link id='gray-button' href='/connect'>
+                    Connect Identity
+                </Link>
             </div>
             <div className='participants'>{participants} unique humans participated</div>
             <World globeConfig={globeConfig} data={arcs} />
