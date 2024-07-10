@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
         if (tries > 3) return NextResponse.json({ error }, { status: 500 });
 
         tries++;
-        POST(request);
+        return await POST(request);
     }
 }
 
