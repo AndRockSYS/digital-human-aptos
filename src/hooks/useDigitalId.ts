@@ -44,15 +44,16 @@ const useDigitalId = () => {
         const digitalId: DigitalId = {
             name: body.name,
             digitalIdAddress: resource.token_id,
-            faceIpfsHash: token.uri.split('/')[4],
+            faceIpfsHash: body.objLink,
         };
 
-        if (resource.iris.length) digitalId.irisAddress = resource.iris[0];
-        if (resource.fingerprint.length) digitalId.fingerprintAddress = resource.fingerprint[0];
+        if (resource.iris.vec.length) digitalId.irisAddress = resource.iris.vec[0];
+        if (resource.fingerprint.vec.length)
+            digitalId.fingerprintAddress = resource.fingerprint.vec[0];
 
         return digitalId;
     };
-    //todo get actual face.obj file from API
+
     const createDigitalId = async (address: string, name: string, faceData: Buffer) => {
         const exists = await hasDigitalId(address);
         if (exists) return;
@@ -71,6 +72,7 @@ const useDigitalId = () => {
                 key: signature.toString(),
             }),
         });
+        if (response.status != 200) return;
         const body = await response.json();
 
         const tx: InputTransactionData = {
@@ -113,6 +115,7 @@ const useDigitalId = () => {
                 digitalIdHash: token.uri.split('/')[4],
             }),
         });
+        if (response.status != 200) return;
         const body = await response.json();
 
         const tx: InputTransactionData = {
