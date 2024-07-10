@@ -10,6 +10,9 @@ import useDigitalId from '@/hooks/useDigitalId';
 
 import BiometricsStatus from './BiometricsStatus';
 import Nav from '@/components/Nav';
+import ObjViewer from '@/components/ObjViewer';
+
+import { DigitalId } from '@/types';
 
 import './digital-id.css';
 
@@ -19,6 +22,8 @@ export default function DigitalHuman() {
     const { getDigitalId } = useDigitalId();
 
     const [digitalId, setDigitalId] = useState<DigitalId>();
+
+    const [objViewer, setObjViewer] = useState(false);
 
     useEffect(() => {
         if (!connected) router.push('/');
@@ -57,6 +62,7 @@ export default function DigitalHuman() {
                         alt='face-preview'
                         width={20}
                         height={20}
+                        onClick={() => setObjViewer(true)}
                     />
                 </div>
                 <h6>Biometrics</h6>
@@ -80,6 +86,15 @@ export default function DigitalHuman() {
                 <Link href={'/'} className='home-button'>
                     <Image src='/icons/home-button.svg' alt='home' width={72} height={72} />
                 </Link>
+                {useMemo(
+                    () =>
+                        objViewer && digitalId ? (
+                            <ObjViewer objLink={digitalId?.faceIpfsHash} />
+                        ) : (
+                            <></>
+                        ),
+                    [objViewer]
+                )}
             </section>
         </main>
     );
