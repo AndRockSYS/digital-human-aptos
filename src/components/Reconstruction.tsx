@@ -29,13 +29,13 @@ export default function Reconstruction({ createDigitalId, setFinished, file }: P
                 let tries = 0;
                 let runs = 0;
 
-                while (runs < 5 || tries < 7) {
+                while (runs < 5 && tries < 10) {
                     const result = await sendImage(file);
                     result ? runs++ : tries++;
                 }
 
                 if (tries == 7) {
-                    sendingDataRecursion();
+                    return;
                 } else setStage(3);
             }
         });
@@ -50,7 +50,7 @@ export default function Reconstruction({ createDigitalId, setFinished, file }: P
         if (stage == 0) setStage(1);
         if (stage == 1)
             serverStatus().then(async (status) => {
-                if (status == State.Stopped) {
+                if (status == State.Stopped || status == State.Stopping) {
                     const success = await startServer();
                     if (success) {
                         await new Promise((resolve) => setTimeout(resolve, 180_000));
@@ -61,6 +61,25 @@ export default function Reconstruction({ createDigitalId, setFinished, file }: P
 
         if (stage == 2) sendingDataRecursion();
     }, [stage]);
+
+    const handleGenerateClick = useMemo(
+        () => async () => {
+            if (!name) return;
+            setStage(4);
+            console.log(objLink);
+            const objMesh = await fetch(objLink);
+            const blob = await objMesh.blob();
+
+            await createDigitalId(
+                account?.address as string,
+                name,
+                Buffer.from(await blob.arrayBuffer())
+            );
+            await stopServerRecursion();
+            setFinished(true);
+        },
+        [objLink, name, account]
+    );
 
     return (
         <>
@@ -103,21 +122,7 @@ export default function Reconstruction({ createDigitalId, setFinished, file }: P
                                 click here. Provide a name for your digital human ID and proceed
                                 with generating your identity on Aptos once confirmed.
                             </h6>
-                            <button
-                                id='green-button'
-                                onClick={async () => {
-                                    if (!name) return;
-                                    setStage(4);
-                                    const objMesh = await fetch(objLink);
-                                    await createDigitalId(
-                                        account?.address as string,
-                                        name,
-                                        Buffer.from(await objMesh.arrayBuffer())
-                                    );
-                                    await stopServerRecursion();
-                                    setFinished(true);
-                                }}
-                            >
+                            <button id='green-button' onClick={handleGenerateClick}>
                                 <Image src='/icons/aptos.svg' alt='aptos' width={20} height={20} />
                                 Generate Identity
                             </button>
