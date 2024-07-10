@@ -76,7 +76,7 @@ const useDigitalId = () => {
                 function: `${process.env.NEXT_PUBLIC_MODULE}::digital_id::create_digital_id`,
                 functionArguments: [
                     `${process.env.PINATA_URL}${body.ipfsHash}`,
-                    signMessageToBytes(body.ipfsHash),
+                    signMessageToBytes(`${process.env.PINATA_URL}${body.ipfsHash}`),
                 ],
             },
         };
@@ -117,10 +117,10 @@ const useDigitalId = () => {
             data: {
                 function: `${process.env.NEXT_PUBLIC_MODULE}::digital_id::verify_data`,
                 functionArguments: [
-                    body.digitaIdIpfsHash,
+                    `${process.env.PINATA_URL}${body.digitaIdIpfsHash}`,
                     dataType,
-                    body.dataIpfsHash,
-                    signMessageToBytes(body.digitaIdIpfsHash),
+                    `${process.env.PINATA_URL}${body.dataIpfsHash}`,
+                    signMessageToBytes(`${process.env.PINATA_URL}${body.digitaIdIpfsHash}`),
                 ],
             },
         };
