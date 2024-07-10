@@ -29,7 +29,7 @@ export default function Reconstruction({ createDigitalId, setFinished, file }: P
                 let tries = 0;
                 let runs = 0;
 
-                while (runs < 5 && tries < 10) {
+                while (runs < 4 && tries < 10) {
                     const result = await sendImage(file);
                     result ? runs++ : tries++;
                 }
@@ -47,10 +47,12 @@ export default function Reconstruction({ createDigitalId, setFinished, file }: P
     };
 
     useEffect(() => {
-        if (stage == 0) setStage(1);
+        if (stage == 0)
+            new Promise((resolve) => setTimeout(resolve, 3_000)).then(() => setStage(1));
         if (stage == 1)
             serverStatus().then(async (status) => {
-                if (status == State.Stopped || status == State.Stopping) {
+                if (status == State.Stopping) setStage(0);
+                if (status == State.Stopped) {
                     const success = await startServer();
                     if (success) {
                         await new Promise((resolve) => setTimeout(resolve, 180_000));
