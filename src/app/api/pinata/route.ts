@@ -36,6 +36,7 @@ export async function GET(request: NextRequest) {
     }
 }
 
+let tries = 1;
 export async function POST(request: NextRequest) {
     try {
         const body: {
@@ -69,7 +70,10 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ ipfsHash: pinataResponse.IpfsHash }, { status: 200 });
     } catch (error) {
         console.log(error);
-        return NextResponse.json({ error }, { status: 500 });
+        if (tries > 3) return NextResponse.json({ error }, { status: 500 });
+
+        tries++;
+        POST(request);
     }
 }
 
