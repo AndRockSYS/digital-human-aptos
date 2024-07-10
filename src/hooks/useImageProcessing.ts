@@ -1,19 +1,7 @@
-import { useEffect, useState } from 'react';
-
-enum State {
-    Running,
-    Stopped,
-    Stopping,
-}
+import { useState } from 'react';
 
 const useImageProcessing = () => {
-    const [file, setFile] = useState<File>();
-    const [imageLink, setImageLink] = useState('');
     const [objLink, setObjLink] = useState('');
-
-    useEffect(() => {
-        if (!imageLink) return;
-    }, [imageLink]);
 
     const serverInteractions = async (action: 'start' | 'stop'): Promise<string> => {
         const response = await fetch('/api/flask', {
@@ -26,8 +14,7 @@ const useImageProcessing = () => {
         return json.message;
     };
 
-    const imageInteractions = async (action: 'upload' | 'send'): Promise<string> => {
-        if (!file) return '';
+    const imageInteractions = async (file: File, action: 'upload' | 'send'): Promise<string> => {
         const status = await serverStatus();
         if (status != State.Running) return '';
 
@@ -66,19 +53,18 @@ const useImageProcessing = () => {
         return message == 'Stopping';
     };
 
-    const uploadImage = async (): Promise<boolean> => {
+    const uploadImage = async (file: File): Promise<boolean> => {
         try {
-            const result = await imageInteractions('upload');
-            setImageLink(result);
+            const result = await imageInteractions(file, 'upload');
             return result != '';
         } catch (error) {
             return false;
         }
     };
 
-    const sendImage = async (): Promise<boolean> => {
+    const sendImage = async (file: File): Promise<boolean> => {
         try {
-            const result = await imageInteractions('send');
+            const result = await imageInteractions(file, 'send');
             setObjLink(result);
             return result != '';
         } catch (error) {
@@ -86,7 +72,14 @@ const useImageProcessing = () => {
         }
     };
 
-    return { serverStatus, startServer, stopServer, setFile, uploadImage, sendImage, objLink };
+    return {
+        serverStatus,
+        startServer,
+        stopServer,
+        uploadImage,
+        sendImage,
+        objLink,
+    };
 };
 
 export default useImageProcessing;
