@@ -3,6 +3,8 @@ import { InputTransactionData, useWallet } from '@aptos-labs/wallet-adapter-reac
 
 import signMessageToBytes from '@/utils/sign-message';
 
+import { DigitalId } from '@/types';
+
 const useDigitalId = () => {
     const { signAndSubmitTransaction, signMessage } = useWallet();
 

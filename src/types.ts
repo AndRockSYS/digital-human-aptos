@@ -1,4 +1,4 @@
-interface DigitalId {
+export interface DigitalId {
     name: string;
     digitalIdAddress: string;
     faceIpfsHash: string;
@@ -6,7 +6,7 @@ interface DigitalId {
     fingerprintAddress?: string;
 }
 
-enum State {
+export enum State {
     Running,
     Stopped,
     Stopping,

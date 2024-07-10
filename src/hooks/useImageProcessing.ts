@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+import { State } from 'types';
+
 const useImageProcessing = () => {
     const [objLink, setObjLink] = useState('');
 
