@@ -10,7 +10,6 @@ import useDigitalId from '@/hooks/useDigitalId';
 
 import BiometricsStatus from './BiometricsStatus';
 import Nav from '@/components/Nav';
-// import ObjViewer from '@/components/ObjViewer';
 
 import { DigitalId } from '@/types';
 
@@ -23,8 +22,9 @@ export default function DigitalHuman() {
 
     const [digitalId, setDigitalId] = useState<DigitalId>();
 
-    const [objLink, setObjLink] = useState<string>();
-    const [objViewer, setObjViewer] = useState(false);
+    useEffect(() => {
+        console.log(digitalId?.faceLink);
+    }, [digitalId]);
 
     useEffect(() => {
         if (!connected) router.push('/');
@@ -58,18 +58,19 @@ export default function DigitalHuman() {
                             View Digital Human ID
                         </Link>
                     </div>
-                    <Image
-                        src='/icons/face-preview.png'
-                        alt='face-preview'
-                        width={20}
-                        height={20}
-                        onClick={() => {
-                            if (!digitalId) return;
-                            console.log(digitalId.faceLink);
-                            setObjLink(digitalId.faceLink);
-                            setObjViewer(true);
-                        }}
-                    />
+                    {useMemo(
+                        () => (
+                            <Link href={digitalId?.faceLink ? digitalId.faceLink : '/digital-id'}>
+                                <Image
+                                    src='/icons/face-preview.png'
+                                    alt='face-preview'
+                                    width={20}
+                                    height={20}
+                                />
+                            </Link>
+                        ),
+                        [digitalId]
+                    )}
                 </div>
                 <h6>Biometrics</h6>
                 <div className='biometrics'>
@@ -92,10 +93,6 @@ export default function DigitalHuman() {
                 <Link href={'/'} className='home-button'>
                     <Image src='/icons/home-button.svg' alt='home' width={72} height={72} />
                 </Link>
-                {/* {useMemo(
-                    () => (objViewer && objLink ? <ObjViewer objLink={objLink} /> : <></>),
-                    [objViewer]
-                )} */}
             </section>
         </main>
     );

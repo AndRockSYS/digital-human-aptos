@@ -29,9 +29,14 @@ main.digital-id {
                 cursor: pointer;
             }
 
-            > img {
+            > a {
                 width: 2rem;
                 height: auto;
+
+                > img {
+                    width: 100%;
+                    height: auto;
+                }
             }
 
             > div {

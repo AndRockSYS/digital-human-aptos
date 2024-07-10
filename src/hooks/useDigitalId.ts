@@ -44,7 +44,7 @@ const useDigitalId = () => {
         const digitalId: DigitalId = {
             name: body.name,
             digitalIdAddress: resource.token_id,
-            faceLink: body.objLink,
+            faceLink: body.objLink.link,
         };
 
         if (resource.iris.vec.length) digitalId.irisAddress = resource.iris.vec[0];
