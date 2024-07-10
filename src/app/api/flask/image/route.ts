@@ -17,8 +17,8 @@ export async function POST(request: NextRequest) {
             body: formData,
         });
 
-        const json = await response.json();
         if (response.status != 200) throw new Error('Server Error');
+        const json = await response.json();
 
         return NextResponse.json(
             { link: action == 'upload' ? json.s3_url : json.imageURL },
