@@ -5,3 +5,9 @@ interface DigitalId {
     irisAddress?: string;
     fingerprintAddress?: string;
 }
+
+enum State {
+    Running,
+    Stopped,
+    Stopping,
+}
