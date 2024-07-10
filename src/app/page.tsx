@@ -2,11 +2,14 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 
 import useDigitalId from '@/hooks/useDigitalId';
-import { World } from '@/components/ui/globe';
 
+const World = dynamic(() => import('@/components/ui/globe').then((m) => m.World), {
+    ssr: false,
+});
 import { arcs, globeConfig } from '@/data/globe-data';
 
 import './home.css';
