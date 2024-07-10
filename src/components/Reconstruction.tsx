@@ -51,7 +51,10 @@ export default function Reconstruction({ createDigitalId, setFinished, file }: P
             new Promise((resolve) => setTimeout(resolve, 3_000)).then(() => setStage(1));
         if (stage == 1)
             serverStatus().then(async (status) => {
-                if (status == State.Stopping) setStage(0);
+                if (status == State.Stopping) {
+                    setStage(0);
+                    return;
+                }
                 if (status == State.Stopped) {
                     const success = await startServer();
                     if (success) {
