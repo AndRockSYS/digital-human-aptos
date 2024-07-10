@@ -10,7 +10,7 @@ import useDigitalId from '@/hooks/useDigitalId';
 
 import BiometricsStatus from './BiometricsStatus';
 import Nav from '@/components/Nav';
-// import ObjViewer from '@/components/ObjViewer';
+import ObjViewer from '@/components/ObjViewer';
 
 import { DigitalId } from '@/types';
 
@@ -67,7 +67,7 @@ export default function DigitalHuman() {
                             if (!digitalId) return;
                             console.log(digitalId.faceLink);
                             setObjLink(digitalId.faceLink);
-                            //setObjViewer(true);
+                            setObjViewer(true);
                         }}
                     />
                 </div>
