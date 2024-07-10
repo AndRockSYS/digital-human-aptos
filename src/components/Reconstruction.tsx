@@ -2,8 +2,9 @@
 
 import Image from 'next/image';
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
-
 import { useWallet } from '@aptos-labs/wallet-adapter-react';
+
+import useImageProcessing from '@/hooks/useImageProcessing';
 
 interface Props {
     createDigitalId: (address: string, name: string, faceData: Buffer) => Promise<void>;
@@ -13,24 +14,51 @@ interface Props {
 
 export default function Reconstruction({ createDigitalId, setFinished, file }: Props) {
     const { account } = useWallet();
+    const { startServer, stopServer, uploadImage, sendImage, serverStatus, objLink } =
+        useImageProcessing();
 
     const [stage, setStage] = useState(1);
-    //1 - warming the server
-    //2 - reconstructiong the identity
-    //3 - input
-    //other - minting, last stage
-
     const [name, setName] = useState('');
 
-    //todo execute all the API stuff here and change stage considering that
+    const sendingDataRecursion = () => {
+        uploadImage(file).then(async (success) => {
+            if (!success) sendingDataRecursion();
+            else {
+                let tries = 0;
+                let runs = 0;
+
+                while (runs < 5 || tries < 7) {
+                    const result = await sendImage(file);
+                    result ? runs++ : tries++;
+                }
+
+                if (tries == 7) {
+                    sendingDataRecursion();
+                } else setStage(3);
+            }
+        });
+    };
+
+    const stopServerRecursion = async () => {
+        const result = await stopServer();
+        if (!result) stopServerRecursion();
+    };
 
     useEffect(() => {
-        new Promise((resolve) => setTimeout(resolve, 1000)).then(async () => {
-            setStage(2);
-            await new Promise((resolve) => setTimeout(resolve, 1000));
-            setStage(3);
-        });
-    }, []);
+        if (stage == 0) setStage(1);
+        if (stage == 1)
+            serverStatus().then(async (status) => {
+                if (status == State.Stopped) {
+                    const success = await startServer();
+                    if (success) {
+                        await new Promise((resolve) => setTimeout(resolve, 180_000));
+                        setStage(2);
+                    } else setStage(0);
+                } else setStage(2);
+            });
+
+        if (stage == 2) sendingDataRecursion();
+    }, [stage]);
 
     return (
         <>
@@ -83,6 +111,7 @@ export default function Reconstruction({ createDigitalId, setFinished, file }: P
                                         name,
                                         Buffer.from(await file.arrayBuffer())
                                     );
+                                    await stopServerRecursion();
                                     setFinished(true);
                                 }}
                             >
