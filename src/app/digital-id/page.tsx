@@ -23,6 +23,7 @@ export default function DigitalHuman() {
 
     const [digitalId, setDigitalId] = useState<DigitalId>();
 
+    const [objFile, setObjFile] = useState<File>();
     const [objViewer, setObjViewer] = useState(false);
 
     useEffect(() => {
@@ -62,7 +63,14 @@ export default function DigitalHuman() {
                         alt='face-preview'
                         width={20}
                         height={20}
-                        onClick={() => setObjViewer(true)}
+                        onClick={async () => {
+                            if (!digitalId) return;
+
+                            const response = await fetch(digitalId.faceIpfsHash);
+                            const file = new File([await response.blob()], 'face.obj');
+                            setObjFile(file);
+                            setObjViewer(true);
+                        }}
                     />
                 </div>
                 <h6>Biometrics</h6>
@@ -87,12 +95,7 @@ export default function DigitalHuman() {
                     <Image src='/icons/home-button.svg' alt='home' width={72} height={72} />
                 </Link>
                 {useMemo(
-                    () =>
-                        objViewer && digitalId ? (
-                            <ObjViewer objLink={digitalId?.faceIpfsHash} />
-                        ) : (
-                            <></>
-                        ),
+                    () => (objViewer && objFile ? <ObjViewer file={objFile} /> : <></>),
                     [objViewer]
                 )}
             </section>
