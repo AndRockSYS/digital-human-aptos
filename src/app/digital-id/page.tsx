@@ -10,7 +10,7 @@ import useDigitalId from '@/hooks/useDigitalId';
 
 import BiometricsStatus from './BiometricsStatus';
 import Nav from '@/components/Nav';
-import ObjViewer from '@/components/ObjViewer';
+// import ObjViewer from '@/components/ObjViewer';
 
 import { DigitalId } from '@/types';
 
@@ -23,7 +23,7 @@ export default function DigitalHuman() {
 
     const [digitalId, setDigitalId] = useState<DigitalId>();
 
-    const [objFile, setObjFile] = useState<File>();
+    const [objLink, setObjLink] = useState<string>();
     const [objViewer, setObjViewer] = useState(false);
 
     useEffect(() => {
@@ -63,13 +63,11 @@ export default function DigitalHuman() {
                         alt='face-preview'
                         width={20}
                         height={20}
-                        onClick={async () => {
+                        onClick={() => {
                             if (!digitalId) return;
-
-                            const response = await fetch(digitalId.faceIpfsHash);
-                            const file = new File([await response.blob()], 'face.obj');
-                            setObjFile(file);
-                            setObjViewer(true);
+                            console.log(digitalId.faceLink);
+                            setObjLink(digitalId.faceLink);
+                            //setObjViewer(true);
                         }}
                     />
                 </div>
@@ -94,10 +92,10 @@ export default function DigitalHuman() {
                 <Link href={'/'} className='home-button'>
                     <Image src='/icons/home-button.svg' alt='home' width={72} height={72} />
                 </Link>
-                {useMemo(
-                    () => (objViewer && objFile ? <ObjViewer file={objFile} /> : <></>),
+                {/* {useMemo(
+                    () => (objViewer && objLink ? <ObjViewer objLink={objLink} /> : <></>),
                     [objViewer]
-                )}
+                )} */}
             </section>
         </main>
     );

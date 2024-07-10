@@ -44,7 +44,7 @@ const useDigitalId = () => {
         const digitalId: DigitalId = {
             name: body.name,
             digitalIdAddress: resource.token_id,
-            faceIpfsHash: body.objLink,
+            faceLink: body.objLink,
         };
 
         if (resource.iris.vec.length) digitalId.irisAddress = resource.iris.vec[0];
@@ -54,7 +54,7 @@ const useDigitalId = () => {
         return digitalId;
     };
 
-    const createDigitalId = async (address: string, name: string, faceData: Buffer) => {
+    const createDigitalId = async (address: string, name: string, faceDataLink: string) => {
         const exists = await hasDigitalId(address);
         if (exists) return;
 
@@ -65,7 +65,7 @@ const useDigitalId = () => {
         const signature = signedResponse.signature as Signature;
 
         const formData = new FormData();
-        formData.append('faceData', new Blob([faceData]));
+        formData.append('faceData', faceDataLink);
         formData.append('personName', name);
         formData.append('key', signature.toString());
 
