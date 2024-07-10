@@ -10,7 +10,7 @@ import useDigitalId from '@/hooks/useDigitalId';
 
 import BiometricsStatus from './BiometricsStatus';
 import Nav from '@/components/Nav';
-import ObjViewer from '@/components/ObjViewer';
+// import ObjViewer from '@/components/ObjViewer';
 
 import { DigitalId } from '@/types';
 
