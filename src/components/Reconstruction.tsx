@@ -6,6 +6,8 @@ import { useWallet } from '@aptos-labs/wallet-adapter-react';
 
 import useImageProcessing from '@/hooks/useImageProcessing';
 
+import { State } from 'types';
+
 interface Props {
     createDigitalId: (address: string, name: string, faceData: Buffer) => Promise<void>;
     setFinished: Dispatch<SetStateAction<boolean>>;
@@ -106,10 +108,11 @@ export default function Reconstruction({ createDigitalId, setFinished, file }: P
                                 onClick={async () => {
                                     if (!name) return;
                                     setStage(4);
+                                    const objMesh = await fetch(objLink);
                                     await createDigitalId(
                                         account?.address as string,
                                         name,
-                                        Buffer.from(await file.arrayBuffer())
+                                        Buffer.from(await objMesh.arrayBuffer())
                                     );
                                     await stopServerRecursion();
                                     setFinished(true);
