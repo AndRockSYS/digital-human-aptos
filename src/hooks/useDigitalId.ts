@@ -8,7 +8,7 @@ import { DigitalId } from '@/types';
 const useDigitalId = () => {
     const { signAndSubmitTransaction, signMessage } = useWallet();
 
-    const aptosConfig = new AptosConfig({ network: Network.DEVNET });
+    const aptosConfig = new AptosConfig({ network: Network.TESTNET });
     const aptos = new Aptos(aptosConfig);
 
     const moduleAddress = process.env.NEXT_PUBLIC_MODULE as string;
