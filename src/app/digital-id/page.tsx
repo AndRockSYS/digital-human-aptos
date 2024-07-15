@@ -53,7 +53,7 @@ export default function DigitalHuman() {
                     <div>
                         <Image src='/icons/aptos.svg' alt='passport' width={20} height={20} />
                         <Link
-                            href={`https://explorer.aptoslabs.com/object/${digitalId?.digitalIdAddress}?network=devnet`}
+                            href={`https://explorer.aptoslabs.com/object/${digitalId?.digitalIdAddress}?network=testnet`}
                         >
                             View Digital Human ID
                         </Link>
